@@ -118,7 +118,7 @@ class GaussianNBPredictor(BasePredictor):
         return "GaussianNB model"
 
     def predict(self,X: pd.Series):
-        y_pred = self.final_model_nd.predict([X])
+        y_pred = self.final_model_nb.predict([X])
         return y_pred
 
 class SVMPredictor(BasePredictor):
@@ -153,15 +153,16 @@ class XGBPredictor(BasePredictor):
     
     def __init__(self):
         super().__init__()
-        self.final_model_xgb = XGBClassifier(colsample_bytree=0.6, gamma=5, max_depth=4, min_child_weight=10, subsample=1.0) # best params
-        self.final_model_xgb.fit(X=self.X_train,y=self.y_train)
+        # self.final_model_xgb = XGBClassifier(colsample_bytree=0.6, gamma=5, max_depth=4, min_child_weight=10, subsample=1.0) # best params
+        # self.final_model_xgb.fit(self.X_train,self.y_train)
 
     def __str__(self):
         return "XGBClassifier model"
 
     def predict(self,X: pd.Series):
-        y_pred = self.final_model_xgb.predict([X])
-        return y_pred
+        # y_pred = self.final_model_xgb.predict([X])
+        # return y_pred
+        pass
 
 class FinalModelPredictor:
     def __init__(self):
@@ -176,12 +177,12 @@ class FinalModelPredictor:
     def predict(self,X: pd.Series):
         print(f"Start predict !")
         result: dict = {
-            "knn" : self.final_model_knn.predict(X=X)[0],
-            "xgb" : self.final_model_xgb.predict(X=X)[0],
-            "rf" : self.final_model_rf.predict(X=X)[0],
-            "nb" : self.final_model_nb.predict(X=X)[0],
-            "lr" : self.final_model_lr.predict(X=X)[0],
-            "svm" : self.final_model_svm.predict(X=X)[0],
-            "dt" : self.final_model_dt.predict(X=X)[0],
+            "knn" : int(self.final_model_knn.predict(X=X)[0]),
+            # "xgb" : str(self.final_model_xgb.predict(X=X)[0]),
+            "rf" : int(self.final_model_rf.predict(X=X)[0]),
+            "nb" : int(self.final_model_nb.predict(X=X)[0]),
+            "lr" : int(self.final_model_lr.predict(X=X)[0]),
+            "svm" : int(self.final_model_svm.predict(X=X)[0]),
+            "dt" : int(self.final_model_dt.predict(X=X)[0]),
         }
         return result 

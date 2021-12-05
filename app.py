@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import Response
-from models.model import KNNPredector
+from models.model import FinalModelPredictor
 import pandas  as pd
 import json
 app = Flask(__name__)
@@ -118,12 +118,8 @@ def predict():
     # TODO use FINALE_MODEL to predect result
     result = FINAL_MODEL.predict(x_to_predict)
 
-
-    data: dict = {
-        "knn": int(result[0])
-    }
     return Response(
-        json.dumps(data),
+        json.dumps(result),
         status=201
     )
   
@@ -132,6 +128,6 @@ if __name__ == "__main__":
     print(f"Application start !")
     print(f"start entrain model ...")
 
-    FINAL_MODEL = KNNPredector()
+    FINAL_MODEL = FinalModelPredictor()
     app.run(host ='0.0.0.0', port=5000, debug=True) 
 
