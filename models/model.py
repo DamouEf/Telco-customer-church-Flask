@@ -79,19 +79,6 @@ class KNNPredictor(BasePredictor):
         y_pred = self.final_model_knn.predict([X])
         return y_pred
 
-
-
-
-# DecisionTreeClassifier DecisionTreeClassifier(criterion='entropy', max_depth=6, random_state=0)
-# LogisticRegression LogisticRegression(C=0.21052631578947345, penalty='l1', random_state=0,solver='liblinear')
-# GaussianNB GaussianNB(var_smoothing=0.0001232846739442066)
-# SVM SVC(C=10, gamma=0.0001, probability=True)
-# RandomForestClassifier RandomForestClassifier(criterion='entropy', max_depth=6, random_state=0)
-
-# XGBClassifier XGBClassifier(colsample_bytree=0.6, gamma=5, max_depth=4, min_child_weight=10, subsample=1.0)
-
-
-
 class DecisionTreePredictor(BasePredictor):
     
     def __init__(self):
@@ -162,7 +149,6 @@ class RandomForestPredictor(BasePredictor):
         y_pred = self.final_model_rf.predict([X])
         return y_pred
 
-
 class XGBPredictor(BasePredictor):
     
     def __init__(self):
@@ -178,4 +164,24 @@ class XGBPredictor(BasePredictor):
         return y_pred
 
 class FinalModelPredictor:
-    pass
+    def __init__(self):
+        self.final_model_xgb = XGBPredictor()
+        self.final_model_rf = RandomForestPredictor()
+        self.final_model_nb = GaussianNBPredictor()
+        self.final_model_lr = LogisticRegressionPredictor()
+        self.final_model_svm = SVMPredictor()
+        self.final_model_dt = DecisionTreePredictor()
+        self.final_model_knn = KNNPredictor()
+
+    def predict(self,X: pd.Series):
+        print(f"Start predict !")
+        result: dict = {
+            "knn" : self.final_model_knn.predict(X=X)[0],
+            "xgb" : self.final_model_xgb.predict(X=X)[0],
+            "rf" : self.final_model_rf.predict(X=X)[0],
+            "nb" : self.final_model_nb.predict(X=X)[0],
+            "lr" : self.final_model_lr.predict(X=X)[0],
+            "svm" : self.final_model_svm.predict(X=X)[0],
+            "dt" : self.final_model_dt.predict(X=X)[0],
+        }
+        return result 
