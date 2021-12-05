@@ -5,6 +5,13 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+# from xgboost import XGBClassifier
+
 
 
 # constant
@@ -14,7 +21,7 @@ ENC = LabelEncoder()
 
 class BasePredector:
 
-    def __init__(self) -> None:
+    def __init__(self):
 
         # initial data
         self.data = None
@@ -30,7 +37,7 @@ class BasePredector:
         self._prepare_data()
         self.split_data() 
 
-    def _convert_object_to_num(self) -> None:
+    def _convert_object_to_num(self):
         print(f"start converting type object to num")
         for column in DATA_TRANSFORM:
             self.data[column] = ENC.fit_transform(self.data[column])
@@ -39,7 +46,7 @@ class BasePredector:
         print(f"remove nan values !")
         self.data = self.data.dropna(axis=0)   
 
-    def _prepare_data(self) -> None:
+    def _prepare_data(self):
         print(f"Prepare X and y start ...")
         self.X = self.data.drop(["Churn"],axis=1)
         print(f"Shape X : {self.X.shape}")
@@ -52,7 +59,7 @@ class BasePredector:
 
 class KNNPredector(BasePredector):
 
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
         # self.grid_param = {'n_neighbors':np.arange(1,25),'metric':['euclidean','manhattan','minkowski']}
         # self.grid: GridSearchCV = GridSearchCV(KNeighborsClassifier(),self.grid_param,cv=5)
@@ -64,10 +71,60 @@ class KNNPredector(BasePredector):
         self.final_model_knn.fit(X=self.X_train,y=self.y_train)
 
 
-    def __str__(self) -> str:
+    def __str__(self):
         return "knn model"
 
 
     def predict(self,X: pd.Series):
         y_pred = self.final_model_knn.predict([X])
         return y_pred
+
+
+
+
+# DecisionTreeClassifier DecisionTreeClassifier(criterion='entropy', max_depth=6, random_state=0)
+# LogisticRegression LogisticRegression(C=0.21052631578947345, penalty='l1', random_state=0,solver='liblinear')
+# GaussianNB GaussianNB(var_smoothing=0.0001232846739442066)
+# SVM SVC(C=10, gamma=0.0001, probability=True)
+# RandomForestClassifier RandomForestClassifier(criterion='entropy', max_depth=6, random_state=0)
+# XGBClassifier XGBClassifier(colsample_bytree=0.6, gamma=5, max_depth=4, min_child_weight=10, subsample=1.0)
+
+
+
+class DecisionTreePredector(BasePredector):
+    
+    def __init__(self):
+        super().__init__()
+        self.final_model_dt = DecisionTreeClassifier(criterion='entropy', max_depth=6, random_state=0) # best params
+        self.final_model_dt.fit(X=self.X_train,y=self.y_train)
+
+    def __str__(self):
+        return "decision tree model"
+
+    def predict(self,X: pd.Series):
+        y_pred = self.final_model_dt.predict([X])
+        return y_pred
+
+
+class KNNPredector(BasePredector):
+    
+    def __init__(self):
+        super().__init__()
+        # self.grid_param = {'n_neighbors':np.arange(1,25),'metric':['euclidean','manhattan','minkowski']}
+        # self.grid: GridSearchCV = GridSearchCV(KNeighborsClassifier(),self.grid_param,cv=5)
+        # self.grid.fit(self.X_train,self.y_train)
+        # print(f"Le meilleur score : {self.grid.best_score_}")
+        # print(f"Les meilleurs valeurs des hyper parametres : {self.grid.best_params_}") 
+        # self.final_model_knn: KNeighborsClassifier = self.grid.best_estimator_
+        self.final_model_knn = KNeighborsClassifier(metric='euclidean', n_neighbors=11) # best params
+        self.final_model_knn.fit(X=self.X_train,y=self.y_train)
+
+    def __str__(self):
+        return "knn model"
+
+    def predict(self,X: pd.Series):
+        y_pred = self.final_model_knn.predict([X])
+        return y_pred
+
+class FinalModelPredector:
+    pass
