@@ -60,7 +60,7 @@ class KNNPredector(BasePredector):
         # print(f"Le meilleur score : {self.grid.best_score_}")
         # print(f"Les meilleurs valeurs des hyper parametres : {self.grid.best_params_}") 
         # self.final_model_knn: KNeighborsClassifier = self.grid.best_estimator_
-        self.final_model_knn = KNeighborsClassifier(metric='euclidean', n_neighbors=11)
+        self.final_model_knn = KNeighborsClassifier(metric='euclidean', n_neighbors=11) # best params
         self.final_model_knn.fit(X=self.X_train,y=self.y_train)
 
 

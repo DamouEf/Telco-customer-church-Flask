@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask import Response
 from models.model import KNNPredector
 import pandas  as pd
 import json
@@ -63,9 +64,9 @@ def predict():
             "streaming_movies": Yes/No/No internet service,
             "contract": month-to-month/one year/two year,
             "paperless_billing": yes/no,
-            "payment_method": ,
+            "payment_method": PAYEMENT_METHOD,
             "monthly_charges": float,
-            "totales_charges": ,
+            "totales_charges": float,
         }
     """
 
@@ -117,11 +118,14 @@ def predict():
     # TODO use FINALE_MODEL to predect result
     result = FINAL_MODEL.predict(x_to_predict)
 
-    message: str = f"x to predect :\n{x_to_predict.__dict__}\nresult:\n{result}"
 
-    return message
-    # TODO get data from request
-  
+    data: dict = {
+        "knn": int(result[0])
+    }
+    return Response(
+        json.dumps(data),
+        status=201
+    )
   
 if __name__ == "__main__":
 
