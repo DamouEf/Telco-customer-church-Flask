@@ -85,8 +85,8 @@ class KNNPredictor(BasePredictor):
 # DecisionTreeClassifier DecisionTreeClassifier(criterion='entropy', max_depth=6, random_state=0)
 # LogisticRegression LogisticRegression(C=0.21052631578947345, penalty='l1', random_state=0,solver='liblinear')
 # GaussianNB GaussianNB(var_smoothing=0.0001232846739442066)
-
 # SVM SVC(C=10, gamma=0.0001, probability=True)
+
 # RandomForestClassifier RandomForestClassifier(criterion='entropy', max_depth=6, random_state=0)
 # XGBClassifier XGBClassifier(colsample_bytree=0.6, gamma=5, max_depth=4, min_child_weight=10, subsample=1.0)
 
@@ -134,7 +134,6 @@ class GaussianNBPredictor(BasePredictor):
         y_pred = self.final_model_nd.predict([X])
         return y_pred
 
-
 class SVMPredictor(BasePredictor):
     
     def __init__(self):
@@ -149,24 +148,18 @@ class SVMPredictor(BasePredictor):
         y_pred = self.final_model_svm.predict([X])
         return y_pred
 
-class KNNPredictor(BasePredictor):
+class RandomForestPredictor(BasePredictor):
     
     def __init__(self):
         super().__init__()
-        # self.grid_param = {'n_neighbors':np.arange(1,25),'metric':['euclidean','manhattan','minkowski']}
-        # self.grid: GridSearchCV = GridSearchCV(KNeighborsClassifier(),self.grid_param,cv=5)
-        # self.grid.fit(self.X_train,self.y_train)
-        # print(f"Le meilleur score : {self.grid.best_score_}")
-        # print(f"Les meilleurs valeurs des hyper parametres : {self.grid.best_params_}") 
-        # self.final_model_knn: KNeighborsClassifier = self.grid.best_estimator_
-        self.final_model_knn = KNeighborsClassifier(metric='euclidean', n_neighbors=11) # best params
-        self.final_model_knn.fit(X=self.X_train,y=self.y_train)
+        self.final_model_rf = RandomForestClassifier(criterion='entropy', max_depth=6, random_state=0) # best params
+        self.final_model_rf.fit(X=self.X_train,y=self.y_train)
 
     def __str__(self):
-        return "knn model"
+        return "RandomForestClassifier model"
 
     def predict(self,X: pd.Series):
-        y_pred = self.final_model_knn.predict([X])
+        y_pred = self.final_model_rf.predict([X])
         return y_pred
 
 class FinalModelPredictor:

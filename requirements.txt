@@ -25,3 +25,4 @@ threadpoolctl==3.0.0
 toml==0.10.2
 tomli==1.2.2
 Werkzeug==2.0.2
+xgboost==1.5.1
