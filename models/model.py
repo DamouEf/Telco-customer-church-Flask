@@ -19,7 +19,7 @@ DATA_TRANSFORM = ['gender', 'SeniorCitizen', 'Partner', 'Dependents', 'PhoneServ
                   'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod']
 ENC = LabelEncoder()
 
-class BasePredector:
+class BasePredictor:
 
     def __init__(self):
 
@@ -57,7 +57,7 @@ class BasePredector:
 
 
 
-class KNNPredector(BasePredector):
+class KNNPredictor(BasePredictor):
 
     def __init__(self):
         super().__init__()
@@ -83,6 +83,7 @@ class KNNPredector(BasePredector):
 
 
 # DecisionTreeClassifier DecisionTreeClassifier(criterion='entropy', max_depth=6, random_state=0)
+
 # LogisticRegression LogisticRegression(C=0.21052631578947345, penalty='l1', random_state=0,solver='liblinear')
 # GaussianNB GaussianNB(var_smoothing=0.0001232846739442066)
 # SVM SVC(C=10, gamma=0.0001, probability=True)
@@ -91,7 +92,7 @@ class KNNPredector(BasePredector):
 
 
 
-class DecisionTreePredector(BasePredector):
+class DecisionTreePredictor(BasePredictor):
     
     def __init__(self):
         super().__init__()
@@ -106,7 +107,22 @@ class DecisionTreePredector(BasePredector):
         return y_pred
 
 
-class KNNPredector(BasePredector):
+class LogisticRegressionPredictor(BasePredictor):
+    
+    def __init__(self):
+        super().__init__()
+        self.final_model_lr = LogisticRegression(C=0.21052631578947345, penalty='l1', random_state=0,solver='liblinear') # best params
+        self.final_model_lr.fit(X=self.X_train,y=self.y_train)
+
+    def __str__(self):
+        return "logistic regression model"
+
+    def predict(self,X: pd.Series):
+        y_pred = self.final_model_lr.predict([X])
+        return y_pred
+
+
+class KNNPredictor(BasePredictor):
     
     def __init__(self):
         super().__init__()
@@ -126,5 +142,5 @@ class KNNPredector(BasePredector):
         y_pred = self.final_model_knn.predict([X])
         return y_pred
 
-class FinalModelPredector:
+class FinalModelPredictor:
     pass
